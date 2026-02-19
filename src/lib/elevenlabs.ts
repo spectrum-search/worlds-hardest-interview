@@ -2,7 +2,7 @@ import type { TranscriptEntry } from "./types";
 
 const BASE_DELAY_MS = 3000;
 const BACKOFF_MULTIPLIER = 1.5;
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 8;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
