@@ -65,24 +65,24 @@ export default function LandingStep({
           Founder & CEO of Carrington Industries
         </motion.p>
 
-        {/* Decorative separator */}
-        <motion.div
-          initial={itemVariants.initial}
-          animate={itemVariants.animate}
-          transition={{ ...baseTransition, delay: staggerDelay * 2 }}
-          className="mt-8 h-px w-16 bg-white/20"
-          aria-hidden="true"
-        />
-
         {/* Stats line */}
         <motion.p
           initial={itemVariants.initial}
           animate={itemVariants.animate}
-          transition={{ ...baseTransition, delay: staggerDelay * 3 }}
-          className="mt-8 font-inter text-base tracking-wide text-white/60"
+          transition={{ ...baseTransition, delay: staggerDelay * 2 }}
+          className="mt-3 font-inter text-base tracking-wide text-white/60"
         >
-          30 years. 40,000 interviews. 12 hires.
+          30 years in business. 40,000 interviews. 12 hires.
         </motion.p>
+
+        {/* Decorative separator */}
+        <motion.div
+          initial={itemVariants.initial}
+          animate={itemVariants.animate}
+          transition={{ ...baseTransition, delay: staggerDelay * 3 }}
+          className="mt-8 h-px w-16 bg-white/20"
+          aria-hidden="true"
+        />
 
         {/* Challenge text */}
         <motion.p
@@ -94,11 +94,23 @@ export default function LandingStep({
           Think you can survive the world's hardest job interview?
         </motion.p>
 
+        {/* Explainer text */}
+        <motion.p
+          initial={itemVariants.initial}
+          animate={itemVariants.animate}
+          transition={{ ...baseTransition, delay: staggerDelay * 5 }}
+          className="mt-5 max-w-md font-inter text-sm leading-relaxed text-white/50"
+        >
+          A live voice interview with an AI executive. Upload your CV, answer
+          his questions, and receive a brutally honest scorecard with an ELO
+          rating. You'll need your microphone.
+        </motion.p>
+
         {/* Begin button */}
         <motion.div
           initial={itemVariants.initial}
           animate={itemVariants.animate}
-          transition={{ ...baseTransition, delay: staggerDelay * 5 }}
+          transition={{ ...baseTransition, delay: staggerDelay * 6 }}
           className="mt-10"
         >
           <motion.button
@@ -120,7 +132,7 @@ export default function LandingStep({
         <motion.p
           initial={itemVariants.initial}
           animate={itemVariants.animate}
-          transition={{ ...baseTransition, delay: staggerDelay * 6 }}
+          transition={{ ...baseTransition, delay: staggerDelay * 7 }}
           className="mt-12 font-inter text-xs tracking-wide text-white/40"
         >
           A Taluna experience

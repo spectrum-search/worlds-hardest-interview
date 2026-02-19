@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Briefcase } from "lucide-react";
 
 import { useInterviewWizard } from "@/hooks/useInterviewWizard";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -177,27 +176,6 @@ export default function Home() {
       >
         Skip to content
       </a>
-
-      {/* Top navigation */}
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={getTransition(prefersReducedMotion, {
-          ...springs.gentle,
-          duration: 0.8,
-        })}
-        className="w-full border-b border-border"
-      >
-        <div className="mx-auto flex max-w-7xl items-center gap-3 px-6 py-6">
-          <Briefcase
-            className="h-[23px] w-[23px] text-text-primary"
-            aria-hidden="true"
-          />
-          <span className="font-inter text-lg font-medium leading-6 text-text-primary">
-            The World's Hardest Job Interview
-          </span>
-        </div>
-      </motion.nav>
 
       {/* Step indicator — hidden on landing */}
       {!isLanding && (
