@@ -1,0 +1,25 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - img [ref=e6]
+        - generic [ref=e9]: The World's Hardest Job Interview
+    - navigation "Interview progress" [ref=e31]:
+      - progressbar "Step 1 — Upload CV" [ref=e32]:
+        - generic [ref=e33]: Step 1 — Upload CV
+    - generic [ref=e40]:
+      - heading "Show me what you've got" [active] [level=2] [ref=e41]
+      - paragraph [ref=e42]: Upload your CV so R.J. Carrington III can tailor his questions to your experience. Consider it reconnaissance — he will find your weaknesses either way.
+      - button "Upload CV file. Drag and drop a file here, or press Enter to browse." [ref=e43]:
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - paragraph [ref=e47]: Drag your file or browse
+          - paragraph [ref=e48]: PDF, DOCX or TXT · Max 10 MB
+      - paragraph [ref=e49]: Supports .pdf, .docx and .txt files
+      - generic [ref=e52]: or
+      - button "Or skip — if you dare." [ref=e54] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]:
+    - img [ref=e27]
+  - alert [ref=e30]

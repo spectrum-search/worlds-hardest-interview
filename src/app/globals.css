@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN SYSTEM TOKENS
+   Source: Taluna brand tokens (taluna-app) + app-specific tokens
+   ============================================================ */
+
+:root {
+  /* Colour tokens — semantic naming, Taluna brand-aligned values */
+  --color-bg-primary: #fbfaf9;       /* Off-white — primary page background */
+  --color-bg-elevated: #ffffff;      /* White — cards, elevated surfaces */
+  --color-bg-dark: #0b0d25;          /* Brand navy — dark contexts, focus rings */
+  --color-bg-muted: #f3f4f6;         /* Subtle fills on white cards */
+  --color-text-primary: #181818;     /* Near-black — primary text */
+  --color-text-secondary: #666666;   /* Muted text */
+  --color-text-tertiary: #8c8c8c;   /* Faintest text, button borders */
+  --color-accent: #699ad6;           /* Blue — primary accent, interactive elements */
+  --color-success: #15875f;          /* Green — success states */
+  --color-error: #ef4444;            /* Red — error states */
+  --color-border: #e6e6e6;           /* Decorative borders */
+
+  /* App-specific tokens (not in taluna-app) */
+  --color-warning: #D97706;          /* Amber — inaccuracy annotations, Competent tier */
+  --color-warning-strong: #EA580C;   /* Strong amber — mistake annotations, Developing tier */
+  --color-elite: #7C3AED;            /* Purple — Elite tier */
+
+  /* Shadows (multi-layer, rgba based on #181818) */
+  --shadow-sm: 0 1px 2px rgba(24, 24, 24, 0.04), 0 1px 4px rgba(24, 24, 24, 0.02);
+  --shadow-md: 0 2px 4px rgba(24, 24, 24, 0.04), 0 4px 8px rgba(24, 24, 24, 0.03), 0 8px 16px rgba(24, 24, 24, 0.02);
+  --shadow-lg: 0 4px 8px rgba(24, 24, 24, 0.04), 0 8px 16px rgba(24, 24, 24, 0.04), 0 16px 32px rgba(24, 24, 24, 0.03);
+  --shadow-xl: 0 8px 16px rgba(24, 24, 24, 0.05), 0 16px 32px rgba(24, 24, 24, 0.04), 0 32px 64px rgba(24, 24, 24, 0.03);
+
+  /* Spacing (semantic tokens, 8px base grid) */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Motion durations */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+}
+
+/* ============================================================
+   TAILWIND v4 THEME — expose tokens as utilities
+   ============================================================ */
+
+@theme inline {
+  /* Colour tokens */
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-bg-dark: var(--color-bg-dark);
+  --color-bg-muted: var(--color-bg-muted);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-accent: var(--color-accent);
+  --color-success: var(--color-success);
+  --color-error: var(--color-error);
+  --color-border: var(--color-border);
+
+  /* App-specific colour tokens */
+  --color-warning: var(--color-warning);
+  --color-warning-strong: var(--color-warning-strong);
+  --color-elite: var(--color-elite);
+
+  /* Font families */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-rubik: var(--font-rubik);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+/* Remove default browser focus outline */
+*:focus {
+  outline: none;
+}
+
+/* Re-apply outline for keyboard navigation (focus-visible wins over focus
+   for keyboard users because it appears later in the cascade). */
+*:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* Form inputs use border change as focus indicator — suppress outline ring */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+/* Pulse animation for microphone indicator during interview */
+@keyframes mic-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.7; }
+}
+
+.mic-pulse {
+  animation: mic-pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Skeleton loading animation */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Spinner animation — linear is correct for continuous rotation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Error shake animation (horizontal oscillation, decaying) */
+@keyframes error-shake {
+  0% { transform: translateX(0); }
+  10% { transform: translateX(-8px); }
+  20% { transform: translateX(8px); }
+  30% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  50% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  70% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+  100% { transform: translateX(0); }
+}
+
+.error-shake {
+  animation: error-shake 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Incoming call ring pulse — expanding concentric rings */
+@keyframes ring-pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.ring-pulse-1 {
+  animation: ring-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.ring-pulse-2 {
+  animation: ring-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.6s;
+}
+
+.ring-pulse-3 {
+  animation: ring-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.2s;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   Disable all animations for users who prefer reduced motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mic-pulse,
+  .ring-pulse-1,
+  .ring-pulse-2,
+  .ring-pulse-3 {
+    animation: none;
+  }
+}

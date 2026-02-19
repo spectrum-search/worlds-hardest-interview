@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js build
+.next/
+out/
+
+# Environment variables (real keys live here — never commit)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Keep the example file (empty placeholders)
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# TypeScript / build
+*.tsbuildinfo
+
+# Vercel
+.vercel
