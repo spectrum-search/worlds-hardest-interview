@@ -43,18 +43,24 @@ export default function InterviewStep({
   prefersReducedMotion,
 }: InterviewStepProps) {
   const [ringing, setRinging] = useState(true);
-  const [started, setStarted] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const conversationIdRef = useRef<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const hasEndedRef = useRef(false);
+  const cvTextRef = useRef(cvText);
+  cvTextRef.current = cvText;
+
+  const cvFallback =
+    "No CV was uploaded. Ask the candidate about their background from scratch.";
 
   const conversation = useConversation({
-    onConnect: () => {
-      setStarted(true);
+    clientTools: {
+      cv_content: async () => cvTextRef.current || cvFallback,
+    },
+    onConnect: ({ conversationId }) => {
+      console.info("[Interview] Connected:", conversationId);
     },
     onDisconnect: () => {
-      // Stop the elapsed time timer
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -62,58 +68,71 @@ export default function InterviewStep({
 
       const id = conversationIdRef.current;
       if (id) {
-        // 2-second delay before advancing to analysis
         setTimeout(() => onConversationEnd(id), 2000);
       }
     },
+    onMessage: ({ source, message }) => {
+      console.debug(`[Interview] ${source}:`, message);
+    },
     onError: (error) => {
       const message = typeof error === "string" ? error : String(error);
-      // Suppress non-critical ElevenLabs tool resolution errors (e.g. when no CV is provided)
-      if (message.includes("Client tool") && message.includes("is not defined")) {
-        return;
-      }
       onError(message || "Voice connection error. Please check your microphone.");
+    },
+    onModeChange: ({ mode }) => {
+      console.debug("[Interview] Mode:", mode);
     },
   });
 
+  // Stable ref so callbacks/effects avoid re-creating when the hook returns a new object each render
+  const conversationRef = useRef(conversation);
+  conversationRef.current = conversation;
+
   const startConversation = useCallback(async () => {
     try {
-      // Request microphone permission explicitly before session start
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
+    } catch {
+      onError("Microphone access is required for the interview.");
+      return;
+    }
 
-      const conversationId = await conversation.startSession({
+    try {
+      const conversationId = await conversationRef.current.startSession({
         agentId: AGENT_ID,
-        connectionType: "webrtc",
+        connectionType: "websocket",
         dynamicVariables: {
-          cv_content:
-            cvText ||
-            "No CV was uploaded. Ask the candidate about their background from scratch.",
+          cv_content: cvText || cvFallback,
         },
       });
       conversationIdRef.current = conversationId;
 
-      // Start the elapsed time counter
+      // Prompt the agent to begin — sent after startSession resolves so the
+      // internal conversation instance (g.current) is guaranteed to be set.
+      conversationRef.current.sendUserMessage(
+        "Hello, I'm ready for the interview.",
+      );
+
       timerRef.current = setInterval(() => {
         setElapsedSeconds((prev) => prev + 1);
       }, 1000);
-    } catch {
-      onError("Microphone access is required for the interview.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to connect to the interview.";
+      onError(message);
     }
-  }, [conversation, cvText, onError]);
+  }, [cvText, onError]);
 
-  /** User answers the incoming call */
   const handleAnswer = useCallback(() => {
     setRinging(false);
     startConversation();
   }, [startConversation]);
 
-  // 15-minute hard time limit — auto-terminate the session
+  // 15-minute hard time limit
   useEffect(() => {
     if (elapsedSeconds >= INTERVIEW_TIME_LIMIT_SECONDS && !hasEndedRef.current) {
       hasEndedRef.current = true;
-      conversation.endSession();
+      conversationRef.current.endSession();
     }
-  }, [elapsedSeconds, conversation]);
+  }, [elapsedSeconds]);
 
   // Clean up the timer on unmount
   useEffect(() => {
@@ -126,8 +145,8 @@ export default function InterviewStep({
 
   const endConversation = useCallback(async () => {
     hasEndedRef.current = true;
-    await conversation.endSession();
-  }, [conversation]);
+    await conversationRef.current.endSession();
+  }, []);
 
   const isSpeaking = conversation.isSpeaking;
   const status = conversation.status;
