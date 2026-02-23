@@ -106,12 +106,6 @@ export default function InterviewStep({
       });
       conversationIdRef.current = conversationId;
 
-      // Prompt the agent to begin — sent after startSession resolves so the
-      // internal conversation instance (g.current) is guaranteed to be set.
-      conversationRef.current.sendUserMessage(
-        "Hello, I'm ready for the interview.",
-      );
-
       timerRef.current = setInterval(() => {
         setElapsedSeconds((prev) => prev + 1);
       }, 1000);
